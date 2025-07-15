@@ -1,49 +1,43 @@
-// script.js
+let creditosAprobados = 0;
 
-let totalCreditos = 0;
-let totalElectivos = 0;
-
-function crearCurso(curso, esElectivo = false) {
-  const div = document.createElement("div");
-  div.className = `curso ${esElectivo ? "electivo" : "obligatorio"}`;
-  div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
-  div.onclick = function () {
-    if (div.classList.contains("completado")) {
-      div.classList.remove("completado");
-      totalCreditos -= curso.creditos;
-      if (esElectivo) totalElectivos -= curso.creditos;
-    } else {
-      div.classList.add("completado");
-      totalCreditos += curso.creditos;
-      if (esElectivo) totalElectivos += curso.creditos;
-    }
-    document.getElementById("creditos").textContent = `Créditos aprobados: ${totalCreditos} (Electivos: ${totalElectivos})`;
-  };
-  return div;
+function actualizarCreditos() {
+  document.getElementById('creditos-totales').textContent = `Créditos aprobados: ${creditosAprobados}`;
 }
 
-fetch("malla.json")
-  .then((res) => res.json())
-  .then((data) => {
-    const contenedor = document.getElementById("contenedor");
+fetch('malla.json')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('malla-container');
 
-    Object.keys(data).forEach((semestre) => {
-      const columna = document.createElement("div");
-      columna.className = "columna";
+    data.forEach((semestre, index) => {
+      const divSemestre = document.createElement('div');
+      divSemestre.classList.add('semestre');
 
-      const titulo = document.createElement("div");
-      titulo.className = "semestre";
-      titulo.textContent = `Semestre ${semestre}`;
+      const titulo = document.createElement('h2');
+      titulo.textContent = `Semestre ${index + 1}`;
+      divSemestre.appendChild(titulo);
 
-      columna.appendChild(titulo);
+      semestre.forEach(curso => {
+        const divCurso = document.createElement('div');
+        divCurso.classList.add('curso');
+        divCurso.classList.add(curso.tipo); // obligatorio o electivo
+        divCurso.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
-      const cursos = data[semestre];
-      cursos.forEach((curso) => {
-        const esElectivo = curso.tipo === "electivo";
-        const divCurso = crearCurso(curso, esElectivo);
-        columna.appendChild(divCurso);
+        divCurso.addEventListener('click', () => {
+          divCurso.classList.toggle('seleccionado');
+          if (divCurso.classList.contains('seleccionado')) {
+            creditosAprobados += curso.creditos;
+          } else {
+            creditosAprobados -= curso.creditos;
+          }
+          actualizarCreditos();
+        });
+
+        divSemestre.appendChild(divCurso);
       });
 
-      contenedor.appendChild(columna);
+      container.appendChild(divSemestre);
     });
   });
+
+actualizarCreditos();
