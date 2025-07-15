@@ -1,109 +1,49 @@
-const cursos = [
-  {
-    semestre: 1,
-    nombre: "Globalización y Realidad Nacional",
-    creditos: 3,
-    tipo: "obligatorio"
-  },
-  {
-    semestre: 1,
-    nombre: "Lenguaje y Comunicación I",
-    creditos: 4,
-    tipo: "obligatorio"
-  },
-  {
-    semestre: 1,
-    nombre: "Metodologías de Investigación",
-    creditos: 3,
-    tipo: "obligatorio"
-  },
-  {
-    semestre: 1,
-    nombre: "Desarrollo Personal y Social",
-    creditos: 3,
-    tipo: "obligatorio"
-  },
-  {
-    semestre: 1,
-    nombre: "Matemática Básica",
-    creditos: 5,
-    tipo: "obligatorio"
-  },
-  {
-    semestre: 2,
-    nombre: "Economía y Empresa",
-    creditos: 3,
-    tipo: "obligatorio"
-  },
-  // Añade más cursos aquí...
-  {
-    semestre: 8,
-    nombre: "Turismo Sostenible",
-    creditos: 3,
-    tipo: "electivo"
-  },
-  {
-    semestre: 8,
-    nombre: "Agilidad Organizacional",
-    creditos: 3,
-    tipo: "electivo"
-  }
-];
+// script.js
 
-let creditosAprobados = 0;
-let creditosElectivos = 0;
+let totalCreditos = 0;
+let totalElectivos = 0;
 
-function crearMalla() {
-  const container = document.getElementById("malla-container");
-  container.innerHTML = "";
+function crearCurso(curso, esElectivo = false) {
+  const div = document.createElement("div");
+  div.className = `curso ${esElectivo ? "electivo" : "obligatorio"}`;
+  div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
+  div.onclick = function () {
+    if (div.classList.contains("completado")) {
+      div.classList.remove("completado");
+      totalCreditos -= curso.creditos;
+      if (esElectivo) totalElectivos -= curso.creditos;
+    } else {
+      div.classList.add("completado");
+      totalCreditos += curso.creditos;
+      if (esElectivo) totalElectivos += curso.creditos;
+    }
+    document.getElementById("creditos").textContent = `Créditos aprobados: ${totalCreditos} (Electivos: ${totalElectivos})`;
+  };
+  return div;
+}
 
-  for (let i = 1; i <= 10; i++) {
-    const semestreDiv = document.createElement("div");
-    semestreDiv.className = "semestre";
+fetch("malla.json")
+  .then((res) => res.json())
+  .then((data) => {
+    const contenedor = document.getElementById("contenedor");
 
-    const h2 = document.createElement("h2");
-    h2.textContent = `Semestre ${i}`;
-    semestreDiv.appendChild(h2);
+    Object.keys(data).forEach((semestre) => {
+      const columna = document.createElement("div");
+      columna.className = "columna";
 
-    cursos
-      .filter(curso => curso.semestre === i)
-      .forEach(curso => {
-        const div = document.createElement("div");
-        div.className = "curso";
-        if (curso.tipo === "electivo") {
-          div.classList.add("electivo");
-        }
+      const titulo = document.createElement("div");
+      titulo.className = "semestre";
+      titulo.textContent = `Semestre ${semestre}`;
 
-        div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
+      columna.appendChild(titulo);
 
-        div.addEventListener("click", () => {
-          div.classList.toggle("aprobado");
-
-          if (div.classList.contains("aprobado")) {
-            creditosAprobados += curso.creditos;
-            if (curso.tipo === "electivo") {
-              creditosElectivos += curso.creditos;
-            }
-          } else {
-            creditosAprobados -= curso.creditos;
-            if (curso.tipo === "electivo") {
-              creditosElectivos -= curso.creditos;
-            }
-          }
-
-          actualizarContador();
-        });
-
-        semestreDiv.appendChild(div);
+      const cursos = data[semestre];
+      cursos.forEach((curso) => {
+        const esElectivo = curso.tipo === "electivo";
+        const divCurso = crearCurso(curso, esElectivo);
+        columna.appendChild(divCurso);
       });
 
-    container.appendChild(semestreDiv);
-  }
-}
-
-function actualizarContador() {
-  document.getElementById("creditos-totales").textContent = 
-    `Créditos aprobados: ${creditosAprobados} (Electivos: ${creditosElectivos})`;
-}
-
-crearMalla();
+      contenedor.appendChild(columna);
+    });
+  });
