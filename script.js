@@ -1,4 +1,3 @@
-// Cargar la malla desde el archivo JSON
 fetch('malla.json')
   .then(response => response.json())
   .then(data => {
@@ -8,20 +7,21 @@ fetch('malla.json')
     // Agrupar cursos por semestre
     const cursosPorSemestre = {};
     data.forEach(curso => {
-      if (!cursosPorSemestre[curso.semestre]) {
-        cursosPorSemestre[curso.semestre] = [];
+      const sem = Number(curso.semestre); // asegurar que sea número
+      if (!cursosPorSemestre[sem]) {
+        cursosPorSemestre[sem] = [];
       }
-      cursosPorSemestre[curso.semestre].push(curso);
+      cursosPorSemestre[sem].push(curso);
     });
 
-    // Ordenar semestres del 1 al 10
+    // Ordenar semestres numéricamente
     const semestresOrdenados = Object.keys(cursosPorSemestre)
       .map(Number)
       .sort((a, b) => a - b);
 
     let creditosAprobados = 0;
 
-    // Crear columna por semestre
+    // Mostrar cursos por semestre
     semestresOrdenados.forEach(semestre => {
       const columna = document.createElement('div');
       columna.className = 'semestre';
@@ -35,7 +35,6 @@ fetch('malla.json')
         div.className = 'curso';
         div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
-        // Simular que los cursos del semestre 1 están aprobados
         if (semestre === 1) {
           div.classList.add('aprobado');
           creditosAprobados += curso.creditos;
@@ -47,7 +46,6 @@ fetch('malla.json')
       container.appendChild(columna);
     });
 
-    // Mostrar créditos aprobados
     creditosDiv.textContent = `Créditos aprobados: ${creditosAprobados}`;
   })
   .catch(error => {
