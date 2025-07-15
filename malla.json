@@ -1,78 +1,59 @@
 [
-  {
-    "semestre": 1,
-    "cursos": [
- { "nombre": "Globalización y Realidad Nacional", "creditos": 3, "tipo": "obligatorio" },
+  [
+    { "nombre": "Globalización y Realidad Nacional", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Lenguaje y Comunicación I", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Metodologías de Investigación", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Desarrollo Personal y Social", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Matemática Básica", "creditos": 5, "tipo": "obligatorio" },
     { "nombre": "Ética Cívica", "creditos": 2, "tipo": "obligatorio" }
-    ]
-  },
-  {
-    "semestre": 2,
-    "cursos": [
-       { "nombre": "Economía y Empresa", "creditos": 3, "tipo": "obligatorio" },
+  ],
+  [
+    { "nombre": "Economía y Empresa", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Lenguaje y Comunicación II", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Procesos Sociales y Políticos", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Temas de Filosofía", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Estadística Básica para los Negocios", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Matemática Aplicada a los Negocios", "creditos": 5, "tipo": "obligatorio" }
-    ]
-  },
-  {
-    "semestre": 3,
-    "cursos": [
-      { "nombre": "Fundamentos de Administración", "creditos": 4, "tipo": "obligatorio" },
+  ],
+  [
+    { "nombre": "Fundamentos de Administración", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Introducción a las Finanzas", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Contabilidad General", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Matemática para la Gestión de Negocios", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Estadística para la Gestión Empresarial I", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Herramientas Informáticas para la Gestión I", "creditos": 3, "tipo": "obligatorio" }
-    ]
-  },
-  {
-    "semestre": 4,
-    "cursos": [
+  ],
+  [
     { "nombre": "Microeconomía", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Costos y Presupuestos", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Herramientas Informáticas para la Gestión II", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Estadística para la Gestión Empresarial II", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Introducción al Marketing", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Planeamiento Estratégico I", "creditos": 3, "tipo": "obligatorio" }
-    ]
-  },
-  {
-    "semestre": 5,
-    "cursos": [
+  ],
+  [
     { "nombre": "Diseño Organizacional", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Gestión de Personas", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Elaboración de Estados Financieros", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Gestión Legal Empresarial", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Marketing Estratégico", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Macroeconomía", "creditos": 3, "tipo": "obligatorio" }
-    ]
-  },
-  {
-    "semestre": 6,
-    "cursos": [
-     { "nombre": "Planeamiento Estratégico II", "creditos": 4, "tipo": "obligatorio" },
+  ],
+  [
+    { "nombre": "Planeamiento Estratégico II", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Análisis de la Información Financiera", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Comportamiento Organizacional", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Investigación y Análisis de Mercado", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Administración de Operaciones", "creditos": 3, "tipo": "obligatorio" },
     { "nombre": "Tecnologías de Información para la Gestión", "creditos": 3, "tipo": "obligatorio" }
-    ]
-  },
-  {
-    "semestre": 7,
-    "cursos": [
-   { "nombre": "Gestión Financiera", "creditos": 4, "tipo": "obligatorio" },
-    { "nombre": "Taller de Liderazgo y Habilidades Gerenciales", "creditos": 3, "tipo": "obligatorio" },
-    { "nombre": "Legislación Laboral", "creditos": 3, "tipo": "obligatorio" },
-    { "nombre": "Gestión Comercial", "creditos": 4, "tipo": "obligatorio" },
+  ],
+  [
     { "nombre": "Taller de Innovación y Creatividad Empresarial", "creditos": 3, "tipo": "electivo" },
+    { "nombre": "Logística y Comercio Internacional", "creditos": 3, "tipo": "electivo" },
+    { "nombre": "Gestión Financiera", "creditos": 4, "tipo": "electivo" },
+    { "nombre": "Taller de Liderazgo y Habilidades Gerenciales", "creditos": 3, "tipo": "electivo" },
+    { "nombre": "Legislación Laboral", "creditos": 3, "tipo": "electivo" },
+    { "nombre": "Gestión Comercial", "creditos": 4, "tipo": "electivo" },
     { "nombre": "Gestión de Empresas Familiares", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Sistemas Integrados de Gestión", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Finanzas Personales y Nuevos Negocios", "creditos": 3, "tipo": "electivo" },
@@ -80,28 +61,22 @@
     { "nombre": "Gestión de Personas por Competencias", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Branding Estratégico", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Taller de Marketing Digital", "creditos": 3, "tipo": "electivo" }
-    ]
-  },
-  {
-    "semestre": 8,
-    "cursos": [
-      { "nombre": "Ética y Sostenibilidad Empresarial", "creditos": 3, "tipo": "obligatorio" },
-    { "nombre": "Taller de Investigación Empresarial", "creditos": 3, "tipo": "obligatorio" },
+  ],
+  [
     { "nombre": "Taller de Emprendimiento y Creación de Negocios", "creditos": 4, "tipo": "electivo" },
     { "nombre": "Gestión de la Cadena de Suministro", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Mercado de Valores", "creditos": 3, "tipo": "electivo" },
+    { "nombre": "Ética y Sostenibilidad Empresarial", "creditos": 3, "tipo": "electivo" },
+    { "nombre": "Taller de Investigación Empresarial", "creditos": 3, "tipo": "electivo" },
     { "nombre": "ERP para la Gestión Empresarial", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Turismo Sostenible", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Agilidad Organizacional", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Gerencia de Activos Financieros", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Marca Personal y Gestión de Carrera", "creditos": 3, "tipo": "electivo" },
     { "nombre": "CRM y Fidelización del Cliente", "creditos": 3, "tipo": "electivo" }
-    ]
-  },
-  {
-    "semestre": 9,
-    "cursos": [
-     { "nombre": "Inteligencia de Negocios", "creditos": 5, "tipo": "obligatorio" },
+  ],
+  [
+    { "nombre": "Inteligencia de Negocios", "creditos": 5, "tipo": "obligatorio" },
     { "nombre": "Gerencia de Operaciones", "creditos": 5, "tipo": "obligatorio" },
     { "nombre": "Gerencia Financiera", "creditos": 5, "tipo": "obligatorio" },
     { "nombre": "Seminario de Investigación en Administración I", "creditos": 4, "tipo": "obligatorio" },
@@ -109,17 +84,12 @@
     { "nombre": "Juego de Negocios", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Gerencia de Proyectos", "creditos": 3, "tipo": "electivo" },
     { "nombre": "Trade y Retail Marketing", "creditos": 3, "tipo": "electivo" }
-    ]
-  },
-  {
-    "semestre": 10,
-    "cursos": [
-      { "nombre": "Dirección Estratégica", "creditos": 5, "tipo": "obligatorio" },
+  ],
+  [
+    { "nombre": "Dirección Estratégica", "creditos": 5, "tipo": "obligatorio" },
     { "nombre": "Gerencia de Personas", "creditos": 5, "tipo": "obligatorio" },
     { "nombre": "Seminario de Investigación en Administración II", "creditos": 4, "tipo": "obligatorio" },
     { "nombre": "Gerencia de Marketing", "creditos": 5, "tipo": "obligatorio" },
-    { "nombre": "Business Analytics", "creditos": 4, "tipo": "obligatorio" }
-  ]
-    ]
-  }
-]
+    { "nombre": "Business Analytics", "creditos": 4, "tipo": "obligatorio" } 
+
+
