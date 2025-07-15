@@ -1,27 +1,56 @@
+/* Fuente moderna */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: 'Inter', Arial, sans-serif;
+  background-color: #f0f2f5;
   padding: 20px;
   color: #333;
+  margin: 0;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 25px;
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 28px;
+  color: #1a1a1a;
+  margin-bottom: 5px;
 }
 
+.subtitulo {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Créditos totales */
+#creditos-totales {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 25px;
+  font-size: 18px;
+  color: #222;
+}
+
+/* Malla grid */
 #malla-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
+/* Caja de semestre */
 .semestre {
-  background-color: #fff;
-  border: 2px solid #ccc;
-  border-radius: 8px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   padding: 15px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.semestre:hover {
+  transform: scale(1.02);
 }
 
 .semestre h2 {
@@ -29,39 +58,56 @@ h1 {
   background-color: #222;
   color: #fff;
   padding: 10px;
+  font-size: 18px;
   border-radius: 6px;
+  margin: -15px -15px 15px -15px;
 }
 
+/* Curso */
 .curso {
   margin: 10px 0;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
   transition: background-color 0.3s ease;
   border-left: 6px solid #444;
+  position: relative;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
-/* Colores diferenciados */
+/* Cursos obligatorios */
 .curso.obligatorio {
-  background-color: #e9f5ff; /* celeste claro */
+  background-color: #e9f5ff;
   border-left-color: #007acc;
 }
 
+/* Cursos electivos */
 .curso.electivo {
-  background-color: #fff4e5; /* naranja claro */
+  background-color: #fff4e5;
   border-left-color: #ff9900;
 }
 
+/* Aprobado */
 .curso.aprobado {
   text-decoration: line-through;
-  background-color: #c8e6c9 !important; /* verde claro */
+  background-color: #d2f3d2 !important;
   color: #666;
 }
 
-#creditos-totales {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 20px;
-  font-size: 18px;
+/* Hover efecto */
+.curso:hover {
+  background-color: #e0e0e0;
 }
 
+/* Footer */
+footer {
+  margin-top: 40px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+footer a {
+  text-decoration: none;
+  color: #007acc;
+}
