@@ -4,24 +4,25 @@ fetch('malla.json')
     const container = document.getElementById('malla-container');
     const creditosDiv = document.getElementById('creditos-totales');
 
-    // Agrupar cursos por semestre
     const cursosPorSemestre = {};
     data.forEach(curso => {
-      const sem = Number(curso.semestre); // asegurar que sea número
+      const sem = Number(curso.semestre);
       if (!cursosPorSemestre[sem]) {
         cursosPorSemestre[sem] = [];
       }
       cursosPorSemestre[sem].push(curso);
     });
 
-    // Ordenar semestres numéricamente
     const semestresOrdenados = Object.keys(cursosPorSemestre)
       .map(Number)
       .sort((a, b) => a - b);
 
     let creditosAprobados = 0;
 
-    // Mostrar cursos por semestre
+    function actualizarCreditos() {
+      creditosDiv.textContent = `Créditos aprobados: ${creditosAprobados}`;
+    }
+
     semestresOrdenados.forEach(semestre => {
       const columna = document.createElement('div');
       columna.className = 'semestre';
@@ -35,10 +36,17 @@ fetch('malla.json')
         div.className = 'curso';
         div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
-        if (semestre === 1) {
-          div.classList.add('aprobado');
-          creditosAprobados += curso.creditos;
-        }
+        // Manejar clic para marcar/desmarcar como aprobado
+        div.addEventListener('click', () => {
+          if (div.classList.contains('aprobado')) {
+            div.classList.remove('aprobado');
+            creditosAprobados -= curso.creditos;
+          } else {
+            div.classList.add('aprobado');
+            creditosAprobados += curso.creditos;
+          }
+          actualizarCreditos();
+        });
 
         columna.appendChild(div);
       });
@@ -46,7 +54,7 @@ fetch('malla.json')
       container.appendChild(columna);
     });
 
-    creditosDiv.textContent = `Créditos aprobados: ${creditosAprobados}`;
+    actualizarCreditos();
   })
   .catch(error => {
     console.error('Error al cargar la malla:', error);
