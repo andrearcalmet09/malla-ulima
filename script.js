@@ -1,83 +1,55 @@
-let cursos = [];
-let cursosAprobados = new Set();
-let totalCreditos = 0;
+// Cargar la malla desde el archivo JSON
+fetch('malla.json')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('malla-container');
+    const creditosDiv = document.getElementById('creditos-totales');
 
-fetch("malla.json")
-  .then((res) => res.json())
-  .then((data) => {
-    cursos = data;
-    renderMalla();
-  });
-
-function renderMalla() {
-  const container = document.getElementById("malla-container");
-  const creditosDisplay = document.getElementById("creditos-totales");
-  const cursosPorSemestre = {};
-
-  cursos.forEach((curso) => {
-    if (!cursosPorSemestre[curso.semestre]) {
-      cursosPorSemestre[curso.semestre] = [];
-    }
-    cursosPorSemestre[curso.semestre].push(curso);
-  });
-
-  Object.keys(cursosPorSemestre).sort().forEach((semestre) => {
-    const columna = document.createElement("div");
-    columna.classList.add("semestre");
-
-    const titulo = document.createElement("h2");
-    titulo.textContent = `Semestre ${semestre}`;
-    columna.appendChild(titulo);
-
-    cursosPorSemestre[semestre].forEach((curso) => {
-      const div = document.createElement("div");
-      div.classList.add("curso");
-      div.id = curso.codigo;
-      div.textContent = `${curso.nombre} (${curso.creditos} cr)`;
-
-      if (!cumpleRequisitos(curso)) {
-        div.classList.add("bloqueado");
+    // Agrupar cursos por semestre
+    const cursosPorSemestre = {};
+    data.forEach(curso => {
+      if (!cursosPorSemestre[curso.semestre]) {
+        cursosPorSemestre[curso.semestre] = [];
       }
-
-      div.addEventListener("click", () => {
-        if (div.classList.contains("bloqueado")) return;
-
-        if (div.classList.contains("aprobado")) {
-          div.classList.remove("aprobado");
-          cursosAprobados.delete(curso.codigo);
-          totalCreditos -= curso.creditos;
-        } else {
-          div.classList.add("aprobado");
-          cursosAprobados.add(curso.codigo);
-          totalCreditos += curso.creditos;
-        }
-
-        actualizarEstadoCursos();
-        creditosDisplay.textContent = `Créditos aprobados: ${totalCreditos}`;
-      });
-
-      columna.appendChild(div);
+      cursosPorSemestre[curso.semestre].push(curso);
     });
 
-    container.appendChild(columna);
+    // Ordenar semestres del 1 al 10
+    const semestresOrdenados = Object.keys(cursosPorSemestre)
+      .map(Number)
+      .sort((a, b) => a - b);
+
+    let creditosAprobados = 0;
+
+    // Crear columna por semestre
+    semestresOrdenados.forEach(semestre => {
+      const columna = document.createElement('div');
+      columna.className = 'semestre';
+
+      const titulo = document.createElement('h2');
+      titulo.textContent = `Semestre ${semestre}`;
+      columna.appendChild(titulo);
+
+      cursosPorSemestre[semestre].forEach(curso => {
+        const div = document.createElement('div');
+        div.className = 'curso';
+        div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
+
+        // Simular que los cursos del semestre 1 están aprobados
+        if (semestre === 1) {
+          div.classList.add('aprobado');
+          creditosAprobados += curso.creditos;
+        }
+
+        columna.appendChild(div);
+      });
+
+      container.appendChild(columna);
+    });
+
+    // Mostrar créditos aprobados
+    creditosDiv.textContent = `Créditos aprobados: ${creditosAprobados}`;
+  })
+  .catch(error => {
+    console.error('Error al cargar la malla:', error);
   });
-}
-
-function cumpleRequisitos(curso) {
-  return curso.req.every((cod) => cursosAprobados.has(cod));
-}
-
-function actualizarEstadoCursos() {
-  cursos.forEach((curso) => {
-    const div = document.getElementById(curso.codigo);
-    if (!div) return;
-
-    if (cursosAprobados.has(curso.codigo)) return;
-
-    if (cumpleRequisitos(curso)) {
-      div.classList.remove("bloqueado");
-    } else {
-      div.classList.add("bloqueado");
-    }
-  });
-}
