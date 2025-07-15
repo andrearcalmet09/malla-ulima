@@ -1,68 +1,53 @@
-let cursosAprobados = new Set();
-let creditosTotales = 0;
+// script.js
+fetch('malla.json')
+  .then(res => res.json())
+  .then(data => generarMalla(data));
 
-const contenedor = document.getElementById("malla-container");
-const creditosDiv = document.getElementById("creditos-totales");
+let totalCreditos = 0;
+let totalElectivos = 0;
 
-fetch("malla.json")
-  .then((res) => res.json())
-  .then((data) => {
-    const cursosPorSemestre = {};
+function generarMalla(malla) {
+  const container = document.getElementById('malla-container');
 
-    // Agrupar cursos por semestre
-    data.forEach((curso) => {
-      if (!cursosPorSemestre[curso.semestre]) {
-        cursosPorSemestre[curso.semestre] = [];
-      }
-      cursosPorSemestre[curso.semestre].push(curso);
-    });
+  malla.sort((a, b) => a.semestre - b.semestre);
 
-    // Ordenar semestres del 1 al 10
-    const semestresOrdenados = Object.keys(cursosPorSemestre)
-      .map(Number)
-      .sort((a, b) => a - b);
+  for (let i = 1; i <= 10; i++) {
+    const columna = document.createElement('div');
+    columna.className = 'semestre';
 
-    semestresOrdenados.forEach((semestre) => {
-      const divSemestre = document.createElement("div");
-      divSemestre.classList.add("semestre");
+    const header = document.createElement('h2');
+    header.textContent = `Semestre ${i}`;
+    columna.appendChild(header);
 
-      const titulo = document.createElement("h2");
-      titulo.textContent = `Semestre ${semestre}`;
-      divSemestre.appendChild(titulo);
+    const cursosSemestre = malla.filter(c => c.semestre === i);
+    cursosSemestre.forEach(curso => {
+      const div = document.createElement('div');
+      div.classList.add('curso');
+      div.classList.add(curso.electivo ? 'electivo' : 'obligatorio');
+      div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
-      cursosPorSemestre[semestre].forEach((curso) => {
-        const divCurso = document.createElement("div");
-        divCurso.classList.add("curso");
-        divCurso.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
-
-        divCurso.addEventListener("click", () => {
-          // Revisar si ya fue aprobado
-          if (cursosAprobados.has(curso.codigo)) {
-            cursosAprobados.delete(curso.codigo);
-            creditosTotales -= curso.creditos;
-            divCurso.classList.remove("aprobado");
-          } else {
-            // Validar prerrequisitos
-            const faltan = curso.req.filter((codigoReq) => !cursosAprobados.has(codigoReq));
-            if (faltan.length > 0) {
-              alert("Debes aprobar los prerrequisitos:\n" + faltan.join(", "));
-              return;
-            }
-            cursosAprobados.add(curso.codigo);
-            creditosTotales += curso.creditos;
-            divCurso.classList.add("aprobado");
-          }
-
-          creditosDiv.textContent = `Créditos aprobados: ${creditosTotales}`;
-        });
-
-        divSemestre.appendChild(divCurso);
+      div.addEventListener('click', () => {
+        if (!div.classList.contains('seleccionado')) {
+          div.classList.add('seleccionado');
+          totalCreditos += curso.creditos;
+          if (curso.electivo) totalElectivos += curso.creditos;
+        } else {
+          div.classList.remove('seleccionado');
+          totalCreditos -= curso.creditos;
+          if (curso.electivo) totalElectivos -= curso.creditos;
+        }
+        actualizarCreditos();
       });
 
-      contenedor.appendChild(divSemestre);
+      columna.appendChild(div);
     });
-  })
-  .catch((error) => {
-    console.error("Error al cargar malla.json:", error);
-    contenedor.innerHTML = "<p>Error al cargar los cursos.</p>";
-  });
+    container.appendChild(columna);
+  }
+
+  actualizarCreditos();
+}
+
+function actualizarCreditos() {
+  const div = document.getElementById('creditos-totales');
+  div.textContent = `Créditos aprobados: ${totalCreditos} (Electivos: ${totalElectivos})`;
+}  
