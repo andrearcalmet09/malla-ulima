@@ -7,7 +7,7 @@
   {"semestre":1,"codigo":"ETICA","nombre":"Ética Cívica","req":[],"creditos":2},
 
   {"semestre":2,"codigo":"6510","nombre":"Economía y Empresa","req":[],"creditos":3},
-  {"semestre":2,"codigo":"6511","nombre":"Lenguaje y Comunicación II","req":["LENG1"],"creditos":3},
+  {"semestre":2,"codigo":"LENG2","nombre":"Lenguaje y Comunicación II","req":["LENG1"],"creditos":3},
   {"semestre":2,"codigo":"6512","nombre":"Procesos Sociales y Políticos","req":[],"creditos":3},
   {"semestre":2,"codigo":"6513","nombre":"Temas de Filosofía","req":[],"creditos":3},
   {"semestre":2,"codigo":"6502","nombre":"Estadística Básica para los Negocios","req":["6382"],"creditos":3},
