@@ -1,7 +1,7 @@
 body {
-  font-family: sans-serif;
-  margin: 20px;
-  background-color: #f8f8f8;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
   color: #333;
 }
 
@@ -11,54 +11,57 @@ h1 {
 }
 
 #malla-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .semestre {
-  background-color: #ffffff;
+  background-color: #fff;
   border: 2px solid #ccc;
-  border-radius: 10px;
-  padding: 16px;
-  width: 280px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .semestre h2 {
   text-align: center;
-  color: #444;
+  background-color: #222;
+  color: #fff;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 .curso {
-  background-color: #e3f2fd;
-  border-left: 5px solid #1976d2;
-  margin: 8px 0;
-  padding: 8px;
+  margin: 10px 0;
+  padding: 10px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+  border-left: 6px solid #444;
 }
 
+/* Colores diferenciados */
 .curso.obligatorio {
-  background-color: #e3f2fd;
-  border-left: 5px solid #1976d2;
+  background-color: #e9f5ff; /* celeste claro */
+  border-left-color: #007acc;
 }
 
 .curso.electivo {
-  background-color: #fff3e0;
-  border-left: 5px solid #f57c00;
+  background-color: #fff4e5; /* naranja claro */
+  border-left-color: #ff9900;
 }
 
-.curso.completado {
-  opacity: 0.6;
+.curso.aprobado {
   text-decoration: line-through;
+  background-color: #c8e6c9 !important; /* verde claro */
+  color: #666;
 }
 
 #creditos-totales {
+  text-align: center;
   font-weight: bold;
   margin-bottom: 20px;
-  text-align: center;
   font-size: 18px;
 }
+
