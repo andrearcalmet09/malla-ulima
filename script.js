@@ -1,53 +1,47 @@
-// script.js
-fetch('malla.json')
-  .then(res => res.json())
-  .then(data => generarMalla(data));
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("malla.json")
+    .then((response) => response.json())
+    .then((data) => crearMalla(data))
+    .catch((error) => console.error("Error cargando la malla:", error));
+});
 
-let totalCreditos = 0;
-let totalElectivos = 0;
+function crearMalla(malla) {
+  const container = document.getElementById("malla-container");
+  let creditosTotales = 0;
 
-function generarMalla(malla) {
-  const container = document.getElementById('malla-container');
+  malla.forEach((semestreObj) => {
+    const divSemestre = document.createElement("div");
+    divSemestre.className = "semestre";
 
-  malla.sort((a, b) => a.semestre - b.semestre);
+    const titulo = document.createElement("h2");
+    titulo.textContent = `Semestre ${semestreObj.semestre}`;
+    divSemestre.appendChild(titulo);
 
-  for (let i = 1; i <= 10; i++) {
-    const columna = document.createElement('div');
-    columna.className = 'semestre';
+    semestreObj.cursos.forEach((curso) => {
+      if (curso.nombre.toLowerCase().includes("electivas") && curso.creditos >= 15) return; // eliminar "Electivas 18 créditos"
 
-    const header = document.createElement('h2');
-    header.textContent = `Semestre ${i}`;
-    columna.appendChild(header);
+      const divCurso = document.createElement("div");
+      divCurso.className = "curso";
+      divCurso.classList.add(curso.electivo ? "electivo" : "obligatorio");
 
-    const cursosSemestre = malla.filter(c => c.semestre === i);
-    cursosSemestre.forEach(curso => {
-      const div = document.createElement('div');
-      div.classList.add('curso');
-      div.classList.add(curso.electivo ? 'electivo' : 'obligatorio');
-      div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
+      divCurso.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
-      div.addEventListener('click', () => {
-        if (!div.classList.contains('seleccionado')) {
-          div.classList.add('seleccionado');
-          totalCreditos += curso.creditos;
-          if (curso.electivo) totalElectivos += curso.creditos;
+      // Permitir marcar cualquier curso (sin prerequisitos)
+      divCurso.addEventListener("click", () => {
+        divCurso.classList.toggle("aprobado");
+
+        if (divCurso.classList.contains("aprobado")) {
+          creditosTotales += curso.creditos;
         } else {
-          div.classList.remove('seleccionado');
-          totalCreditos -= curso.creditos;
-          if (curso.electivo) totalElectivos -= curso.creditos;
+          creditosTotales -= curso.creditos;
         }
-        actualizarCreditos();
+
+        document.getElementById("creditos-totales").textContent = `Créditos aprobados: ${creditosTotales}`;
       });
 
-      columna.appendChild(div);
+      divSemestre.appendChild(divCurso);
     });
-    container.appendChild(columna);
-  }
 
-  actualizarCreditos();
+    container.appendChild(divSemestre);
+  });
 }
-
-function actualizarCreditos() {
-  const div = document.getElementById('creditos-totales');
-  div.textContent = `Créditos aprobados: ${totalCreditos} (Electivos: ${totalElectivos})`;
-}  
