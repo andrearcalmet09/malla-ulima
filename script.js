@@ -1,7 +1,8 @@
-let creditosAprobados = 0;
+let creditosTotales = 0;
 
 function actualizarCreditos() {
-  document.getElementById('creditos-totales').textContent = `Créditos aprobados: ${creditosAprobados}`;
+  document.getElementById('creditos-totales').textContent =
+    `Créditos aprobados: ${creditosTotales}`;
 }
 
 fetch('malla.json')
@@ -9,35 +10,39 @@ fetch('malla.json')
   .then(data => {
     const container = document.getElementById('malla-container');
 
-    data.forEach((semestre, index) => {
-      const divSemestre = document.createElement('div');
-      divSemestre.classList.add('semestre');
+    data.forEach((semestreCursos, index) => {
+      const semestreDiv = document.createElement('div');
+      semestreDiv.className = 'semestre';
 
       const titulo = document.createElement('h2');
       titulo.textContent = `Semestre ${index + 1}`;
-      divSemestre.appendChild(titulo);
+      semestreDiv.appendChild(titulo);
 
-      semestre.forEach(curso => {
-        const divCurso = document.createElement('div');
-        divCurso.classList.add('curso');
-        divCurso.classList.add(curso.tipo); // obligatorio o electivo
-        divCurso.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
+      semestreCursos.forEach(curso => {
+        const div = document.createElement('div');
+        div.className = `curso ${curso.tipo}`;
+        div.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
-        divCurso.addEventListener('click', () => {
-          divCurso.classList.toggle('seleccionado');
-          if (divCurso.classList.contains('seleccionado')) {
-            creditosAprobados += curso.creditos;
+        div.addEventListener('click', () => {
+          if (!div.classList.contains('completado')) {
+            div.classList.add('completado');
+            creditosTotales += curso.creditos;
           } else {
-            creditosAprobados -= curso.creditos;
+            div.classList.remove('completado');
+            creditosTotales -= curso.creditos;
           }
           actualizarCreditos();
         });
 
-        divSemestre.appendChild(divCurso);
+        semestreDiv.appendChild(div);
       });
 
-      container.appendChild(divSemestre);
+      container.appendChild(semestreDiv);
     });
-  });
 
-actualizarCreditos();
+    actualizarCreditos();
+  })
+  .catch(error => {
+    console.error('Error al cargar malla.json:', error);
+    alert('No se pudo cargar la malla curricular. Revisa el archivo malla.json.');
+  });
