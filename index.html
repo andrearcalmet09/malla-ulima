@@ -15,6 +15,15 @@
 
   <main>
     <!-- Estadísticas generales -->
+
+    <section id="datos-previos" style="margin-bottom: 20px;">
+  <h2>📥 Datos anteriores del alumno</h2>
+  <label>PPA anterior: <input type="number" step="0.01" id="ppa-anterior" /></label>
+  <label>Créditos acumulados previos: <input type="number" id="creditos-previos" /></label>
+  <label>PPC anterior: <input type="number" step="0.01" id="ppc-anterior" /></label>
+  <button onclick="guardarDatosPrevios()">💾 Guardar</button>
+</section>
+
     <section id="estadisticas">
       <div id="creditos-totales">✅ Créditos aprobados: <strong>0</strong></div>
       <div id="promedio-general">📊 Promedio acumulado: <strong>-</strong></div>
