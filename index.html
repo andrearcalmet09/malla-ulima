@@ -14,14 +14,34 @@
   </header>
 
   <main>
-    <div id="creditos-totales">✅ Créditos aprobados: <strong>0</strong></div>
+    <section id="estadisticas">
+      <div id="creditos-totales">✅ Créditos aprobados: <strong>0</strong></div>
+      <div id="promedio-general">📊 Promedio acumulado: <strong>-</strong></div>
+      <div id="ranking">🏅 Posición académica: <strong>-</strong></div>
+    </section>
+
     <div id="malla-container"></div>
+
+    <section id="evaluaciones-container">
+      <h2>📝 Evaluaciones y notas por curso</h2>
+      <div id="evaluaciones-tabla"></div>
+    </section>
+
+    <section id="profesores-container">
+      <h2>👩‍🏫 Profesores y asesorías</h2>
+      <div id="profesores-info"></div>
+    </section>
   </main>
 
   <footer>
     <p>📅 Actualizado 2025 · <a href="#">Mi Malla ULima</a></p>
   </footer>
 
+  <!-- Scripts -->
   <script src="script.js"></script>
+  <script src="evaluaciones.js"></script>
+  <script src="profesores.js"></script>
+  <script src="promedio.js"></script>
+  <script src="ranking.js"></script>
 </body>
 </html>
