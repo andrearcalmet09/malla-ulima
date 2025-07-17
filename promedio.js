@@ -1,99 +1,58 @@
-// evaluaciones.js
+function guardarDatosPrevios() {
+  const ppa = parseFloat(document.getElementById("ppa-anterior").value) || 0;
+  const creditos = parseInt(document.getElementById("creditos-previos").value) || 0;
+  const ppc = parseFloat(document.getElementById("ppc-anterior").value) || 0;
 
-const evaluacionesData = {};
-const cursosActivos = [];
+  localStorage.setItem("ppaAnterior", ppa);
+  localStorage.setItem("creditosPrevios", creditos);
+  localStorage.setItem("ppcAnterior", ppc);
 
-function mostrarEvaluaciones(cursoNombre, creditos = 0) {
-  const container = document.getElementById("evaluaciones-tabla");
-  container.innerHTML = "";
+  actualizarPromedios();
+}
 
-  const titulo = document.createElement("h3");
-  titulo.textContent = `📋 Evaluaciones de: ${cursoNombre}`;
-  container.appendChild(titulo);
+function calcularPromediosCursosActuales() {
+  let sumaNotas = 0;
+  let sumaCreditos = 0;
 
-  const tabla = document.createElement("table");
-  tabla.className = "tabla-evaluaciones";
+  if (!window.evaluacionesData || !window.cursosActivos) return { ppc: 0, creditos: 0 };
 
-  const encabezado = document.createElement("tr");
-  encabezado.innerHTML = `
-    <th>Nombre</th>
-    <th>Peso (%)</th>
-    <th>Nota</th>
-    <th></th>
-  `;
-  tabla.appendChild(encabezado);
+  cursosActivos.forEach((curso) => {
+    const evaluaciones = evaluacionesData[curso.nombre];
+    if (!evaluaciones) return;
 
-  if (!evaluacionesData[cursoNombre]) evaluacionesData[cursoNombre] = [];
+    let totalPeso = 0;
+    let notaFinal = 0;
 
-  evaluacionesData[cursoNombre].forEach((eval, i) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td><input value="${eval.nombre}" /></td>
-      <td><input type="number" value="${eval.peso}" /></td>
-      <td><input type="number" value="${eval.nota}" /></td>
-      <td><button onclick="eliminarEvaluacion('${cursoNombre}', ${i})">🗑️</button></td>
-    `;
-    tabla.appendChild(fila);
+    evaluaciones.forEach((ev) => {
+      totalPeso += ev.peso;
+      notaFinal += (ev.nota * ev.peso) / 100;
+    });
+
+    if (Math.round(totalPeso) === 100) {
+      sumaNotas += notaFinal * curso.creditos;
+      sumaCreditos += curso.creditos;
+    }
   });
 
-  container.appendChild(tabla);
-
-  const agregarBtn = document.createElement("button");
-  agregarBtn.textContent = "➕ Agregar evaluación";
-  agregarBtn.onclick = () => agregarEvaluacion(cursoNombre);
-  container.appendChild(agregarBtn);
-
-  const calcularBtn = document.createElement("button");
-  calcularBtn.textContent = "✅ Calcular promedio";
-  calcularBtn.onclick = () => calcularPromedioCurso(cursoNombre);
-  container.appendChild(calcularBtn);
-
-  const resultado = document.createElement("p");
-  resultado.id = "promedio-curso";
-  container.appendChild(resultado);
-
-  if (!cursosActivos.find(c => c.nombre === cursoNombre)) {
-    cursosActivos.push({ nombre: cursoNombre, creditos });
-  }
+  const ppc = sumaCreditos ? (sumaNotas / sumaCreditos).toFixed(2) : 0;
+  return { ppc: parseFloat(ppc), creditos: sumaCreditos };
 }
 
-function agregarEvaluacion(cursoNombre) {
-  evaluacionesData[cursoNombre].push({ nombre: "", peso: 0, nota: 0 });
-  mostrarEvaluaciones(cursoNombre);
-}
+function actualizarPromedios() {
+  const ppaAnterior = parseFloat(localStorage.getItem("ppaAnterior")) || 0;
+  const creditosPrevios = parseInt(localStorage.getItem("creditosPrevios")) || 0;
 
-function eliminarEvaluacion(cursoNombre, index) {
-  evaluacionesData[cursoNombre].splice(index, 1);
-  mostrarEvaluaciones(cursoNombre);
-}
+  const { ppc, creditos: creditosCiclo } = calcularPromediosCursosActuales();
 
-function calcularPromedioCurso(cursoNombre) {
-  const evaluaciones = evaluacionesData[cursoNombre];
-  if (!evaluaciones || evaluaciones.length === 0) return;
+  const sumaNotas = (ppaAnterior * creditosPrevios) + (ppc * creditosCiclo);
+  const totalCreditos = creditosPrevios + creditosCiclo;
 
-  let totalPeso = 0;
-  let totalNota = 0;
+  const nuevoPPA = totalCreditos ? (sumaNotas / totalCreditos).toFixed(2) : 0;
 
-  const filas = document.querySelectorAll(".tabla-evaluaciones tr:not(:first-child)");
-  filas.forEach((fila, i) => {
-    const nombre = fila.children[0].querySelector("input").value;
-    const peso = parseFloat(fila.children[1].querySelector("input").value);
-    const nota = parseFloat(fila.children[2].querySelector("input").value);
+  document.querySelector("#promedio-general strong").textContent = nuevoPPA;
+  document.querySelector("#ranking strong").textContent = determinarRanking(nuevoPPA);
 
-    evaluaciones[i] = { nombre, peso, nota };
-    totalPeso += peso;
-    totalNota += (peso / 100) * nota;
-  });
-
-  const resultado = document.getElementById("promedio-curso");
-
-  if (totalPeso !== 100) {
-    resultado.textContent = "⚠️ El peso total no suma 100%. Corrige los valores.";
-    resultado.style.color = "red";
-  } else {
-    resultado.textContent = `🎯 Promedio final: ${totalNota.toFixed(2)}`;
-    resultado.style.color = "green";
-  }
-
-  calcularPromedioGeneral();
+  // Guardamos el nuevo PPC también
+  localStorage.setItem("ppcActual", ppc);
+  localStorage.setItem("creditosActuales", creditosCiclo);
 }
