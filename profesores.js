@@ -1,34 +1,57 @@
-// profesores.js
-
-const profesoresData = {
-  "Matemática I": { nombre: "Prof. Matemática 1", horario: "Lun y Mié 9-10am" },
-  "Comunicación": { nombre: "Prof. Comunicación 1", horario: "Lun y Mié 9-10am" },
-  "Administración General": { nombre: "Prof. Administración 1", horario: "Lun y Mié 9-10am" },
-  "Contabilidad General": { nombre: "Prof. Contabilidad 1", horario: "Lun y Mié 9-10am" },
-  "Economía General": { nombre: "Prof. Economía 1", horario: "Lun y Mié 9-10am" },
-  "Habilidades del Pensamiento Crítico": { nombre: "Prof. Habilidades 1", horario: "Lun y Mié 9-10am" },
-  "Matemática II": { nombre: "Prof. Matemática 2", horario: "Lun y Mié 10-10am" },
-  "Estadística I": { nombre: "Prof. Estadística 2", horario: "Lun y Mié 10-10am" },
-  "Fundamentos de Marketing": { nombre: "Prof. Fundamentos 2", horario: "Lun y Mié 10-10am" },
-  "Derecho de la Empresa": { nombre: "Prof. Derecho 2", horario: "Lun y Mié 10-10am" },
-  "Psicología Organizacional": { nombre: "Prof. Psicología 2", horario: "Lun y Mié 10-10am" },
-  "Responsabilidad Social": { nombre: "Prof. Responsabilidad 2", horario: "Lun y Mié 10-10am" }
-};
-
 document.addEventListener("DOMContentLoaded", () => {
-  const contenedor = document.getElementById("profesores-info");
-
-  for (const curso in profesoresData) {
-    const { nombre, horario } = profesoresData[curso];
-
-    const div = document.createElement("div");
-    div.className = "profesor-box";
-    div.innerHTML = `
-      <h3>${curso}</h3>
-      <p><strong>Profesor:</strong> ${nombre}</p>
-      <p><strong>Horario:</strong> ${horario}</p>
-    `;
-    contenedor.appendChild(div);
-  }
+  mostrarFormularioProfesores();
 });
 
+function mostrarFormularioProfesores() {
+  const container = document.getElementById("profesores-info");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const cursosGuardados = JSON.parse(localStorage.getItem("profesoresPorCurso") || "{}");
+
+  const cursosActivos = document.querySelectorAll(".curso.aprobado:not(.electivo)");
+  const cursos = [...cursosActivos].map((curso) => curso.textContent.split(" (")[0]);
+
+  if (cursos.length === 0) {
+    container.innerHTML = "<p>✅ Marca cursos como 'Aprobado' para añadir profesor y horario.</p>";
+    return;
+  }
+
+  cursos.forEach((nombreCurso) => {
+    const datos = cursosGuardados[nombreCurso] || { profesor: "", horario: "", asesoria: "" };
+
+    const box = document.createElement("div");
+    box.className = "profesor-box";
+
+    box.innerHTML = `
+      <h4>📘 ${nombreCurso}</h4>
+      <label>👩‍🏫 Profesor: <input type="text" value="${datos.profesor}" data-curso="${nombreCurso}" data-campo="profesor"></label>
+      <label>🕒 Horario: <input type="text" value="${datos.horario}" data-curso="${nombreCurso}" data-campo="horario"></label>
+      <label>💬 Asesoría: <input type="text" value="${datos.asesoria}" data-curso="${nombreCurso}" data-campo="asesoria"></label>
+      <hr />
+    `;
+
+    container.appendChild(box);
+  });
+
+  const guardarBtn = document.createElement("button");
+  guardarBtn.textContent = "💾 Guardar profesores y horarios";
+  guardarBtn.onclick = guardarProfesores;
+  container.appendChild(guardarBtn);
+}
+
+function guardarProfesores() {
+  const inputs = document.querySelectorAll("#profesores-info input");
+  const profesoresData = {};
+
+  inputs.forEach((input) => {
+    const curso = input.dataset.curso;
+    const campo = input.dataset.campo;
+    if (!profesoresData[curso]) profesoresData[curso] = { profesor: "", horario: "", asesoria: "" };
+    profesoresData[curso][campo] = input.value;
+  });
+
+  localStorage.setItem("profesoresPorCurso", JSON.stringify(profesoresData));
+  alert("✅ Guardado correctamente.");
+}
