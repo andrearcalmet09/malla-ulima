@@ -1,7 +1,8 @@
-const evaluacionesData = {};
+// Este archivo trabaja junto con script.js y comparte evaluacionesData global
+// Asegúrate de que script.js esté cargado antes que este en el HTML
 
 function mostrarEvaluaciones(cursoNombre) {
-  const container = document.getElementById("evaluaciones-container");
+  const container = document.getElementById("evaluaciones-tabla");
   container.innerHTML = "";
 
   const titulo = document.createElement("h3");
@@ -20,14 +21,16 @@ function mostrarEvaluaciones(cursoNombre) {
   `;
   tabla.appendChild(encabezado);
 
-  const evaluaciones = evaluacionesData[cursoNombre] || [];
+  if (!evaluacionesData[cursoNombre]) {
+    evaluacionesData[cursoNombre] = [];
+  }
 
-  evaluaciones.forEach((eval, i) => {
+  evaluacionesData[cursoNombre].forEach((eval, i) => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
-      <td><input value="${eval.nombre}" /></td>
-      <td><input type="number" value="${eval.peso}" /></td>
-      <td><input type="number" value="${eval.nota}" /></td>
+      <td><input value="${eval.nombre || ""}" /></td>
+      <td><input type="number" min="0" max="100" value="${eval.peso}" /></td>
+      <td><input type="number" min="0" max="20" value="${eval.nota}" /></td>
       <td><button onclick="eliminarEvaluacion('${cursoNombre}', ${i})">🗑️</button></td>
     `;
     tabla.appendChild(fila);
@@ -35,15 +38,20 @@ function mostrarEvaluaciones(cursoNombre) {
 
   container.appendChild(tabla);
 
-  const agregarBtn = document.createElement("button");
-  agregarBtn.textContent = "➕ Agregar evaluación";
-  agregarBtn.onclick = () => agregarEvaluacion(cursoNombre);
-  container.appendChild(agregarBtn);
+  const botones = document.createElement("div");
+  botones.className = "evaluaciones-controles";
 
-  const calcularBtn = document.createElement("button");
-  calcularBtn.textContent = "✅ Calcular promedio";
-  calcularBtn.onclick = () => calcularPromedioCurso(cursoNombre);
-  container.appendChild(calcularBtn);
+  const btnAgregar = document.createElement("button");
+  btnAgregar.textContent = "➕ Agregar evaluación";
+  btnAgregar.onclick = () => agregarEvaluacion(cursoNombre);
+
+  const btnCalcular = document.createElement("button");
+  btnCalcular.textContent = "✅ Calcular promedio";
+  btnCalcular.onclick = () => calcularPromedioCurso(cursoNombre);
+
+  botones.appendChild(btnAgregar);
+  botones.appendChild(btnCalcular);
+  container.appendChild(botones);
 
   const resultado = document.createElement("p");
   resultado.id = "promedio-curso";
@@ -51,8 +59,6 @@ function mostrarEvaluaciones(cursoNombre) {
 }
 
 function agregarEvaluacion(cursoNombre) {
-  if (!evaluacionesData[cursoNombre]) evaluacionesData[cursoNombre] = [];
-
   evaluacionesData[cursoNombre].push({ nombre: "", peso: 0, nota: 0 });
   mostrarEvaluaciones(cursoNombre);
 }
@@ -63,21 +69,22 @@ function eliminarEvaluacion(cursoNombre, index) {
 }
 
 function calcularPromedioCurso(cursoNombre) {
-  const evaluaciones = evaluacionesData[cursoNombre];
-  if (!evaluaciones || evaluaciones.length === 0) return;
+  const tabla = document.querySelector(".tabla-evaluaciones");
+  const filas = tabla.querySelectorAll("tr:not(:first-child)");
 
   let totalPeso = 0;
   let totalNota = 0;
 
-  const filas = document.querySelectorAll(".tabla-evaluaciones tr:not(:first-child)");
   filas.forEach((fila, i) => {
     const nombre = fila.children[0].querySelector("input").value;
     const peso = parseFloat(fila.children[1].querySelector("input").value);
     const nota = parseFloat(fila.children[2].querySelector("input").value);
 
-    evaluaciones[i] = { nombre, peso, nota };
-    totalPeso += peso;
-    totalNota += (peso / 100) * nota;
+    evaluacionesData[cursoNombre][i] = { nombre, peso, nota };
+    if (!isNaN(peso) && !isNaN(nota)) {
+      totalPeso += peso;
+      totalNota += (peso / 100) * nota;
+    }
   });
 
   const resultado = document.getElementById("promedio-curso");
@@ -89,5 +96,8 @@ function calcularPromedioCurso(cursoNombre) {
     resultado.textContent = `🎯 Promedio final: ${totalNota.toFixed(2)}`;
     resultado.style.color = "green";
   }
+
+  // Actualiza promedio general también
+  actualizarEstadisticas();
 }
 
