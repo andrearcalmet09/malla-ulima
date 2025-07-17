@@ -1,113 +1,126 @@
-/* Fuente moderna */
+/* Fuentes y base */
 body {
-  font-family: 'Inter', Arial, sans-serif;
-  background-color: #f0f2f5;
-  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafc;
   color: #333;
+  padding: 20px;
   margin: 0;
 }
 
-/* Header */
-header {
+h1, h2, h3 {
+  font-weight: 800;
   text-align: center;
-  margin-bottom: 25px;
-}
-
-h1 {
-  font-size: 28px;
-  color: #1a1a1a;
-  margin-bottom: 5px;
 }
 
 .subtitulo {
-  font-size: 16px;
+  text-align: center;
+  font-weight: 400;
+  margin-top: -10px;
+  margin-bottom: 20px;
   color: #666;
 }
 
-/* Créditos totales */
-#creditos-totales {
-  text-align: center;
-  font-weight: 600;
-  margin-bottom: 25px;
-  font-size: 18px;
-  color: #222;
+main {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Malla grid */
+/* Malla */
 #malla-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
 }
 
-/* Caja de semestre */
 .semestre {
-  background-color: #ffffff;
+  background-color: #fff;
+  border: 2px solid #e0e0e0;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   padding: 15px;
-  transition: transform 0.2s ease;
-}
-
-.semestre:hover {
-  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .semestre h2 {
-  text-align: center;
-  background-color: #222;
-  color: #fff;
+  background-color: #007acc;
+  color: white;
   padding: 10px;
-  font-size: 18px;
   border-radius: 6px;
-  margin: -15px -15px 15px -15px;
+  font-size: 18px;
 }
 
-/* Curso */
+/* Cursos */
 .curso {
   margin: 10px 0;
-  padding: 12px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-  border-left: 6px solid #444;
-  position: relative;
-  font-size: 15px;
-  line-height: 1.4;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: 0.3s;
+  border-left: 6px solid transparent;
+  cursor: pointer;
 }
 
-/* Cursos obligatorios */
 .curso.obligatorio {
-  background-color: #e9f5ff;
+  background-color: #e6f4ff;
   border-left-color: #007acc;
 }
 
-/* Cursos electivos */
 .curso.electivo {
-  background-color: #fff4e5;
-  border-left-color: #ff9900;
+  background-color: #fff3e0;
+  border-left-color: #f57c00;
 }
 
-/* Aprobado */
 .curso.aprobado {
+  background-color: #c8e6c9 !important;
   text-decoration: line-through;
-  background-color: #d2f3d2 !important;
   color: #666;
 }
 
-/* Hover efecto */
-.curso:hover {
-  background-color: #e0e0e0;
+/* Estadísticas */
+#estadisticas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+#estadisticas > div {
+  background: #ffffff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  border-left: 6px solid #007acc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Evaluaciones */
+#evaluaciones-container,
+#profesores-container {
+  margin-top: 40px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+#evaluaciones-tabla,
+#profesores-info {
+  margin-top: 10px;
 }
 
 /* Footer */
 footer {
-  margin-top: 40px;
   text-align: center;
-  color: #888;
+  margin-top: 40px;
   font-size: 14px;
+  color: #999;
 }
 
 footer a {
-  text-decoration: none;
   color: #007acc;
+  text-decoration: none;
 }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .semestre h2 {
+    font-siz
