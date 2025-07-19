@@ -7,7 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+let mallaGlobal = [];
+
 function crearMalla(malla) {
+  mallaGlobal = malla;
   const container = document.getElementById("malla-container");
   const creditosEl = document.querySelector("#creditos-totales strong");
 
@@ -30,24 +33,34 @@ function crearMalla(malla) {
       divCurso.textContent = `${curso.nombre} (${curso.creditos} créditos)`;
 
       const cursoId = `${semestreObj.semestre}-${curso.nombre}`;
-      if (localStorage.getItem(cursoId) === "true") {
+      const aprobado = localStorage.getItem(cursoId) === "true";
+
+      if (aprobado) {
         divCurso.classList.add("aprobado");
         creditosAprobados += curso.creditos;
       }
 
-      // Evento de clic: activar evaluaciones y profesores
-      divCurso.addEventListener("click", () => {
-        divCurso.classList.toggle("aprobado");
-        const aprobado = divCurso.classList.contains("aprobado");
+      // Deshabilita si tiene prerrequisitos no cumplidos
+      if (curso.requiere && !cumpleRequisitos(curso.requiere)) {
+        divCurso.classList.add("bloqueado");
+      }
 
-        creditosAprobados += aprobado ? curso.creditos : -curso.creditos;
+      // Evento de clic
+      divCurso.addEventListener("click", () => {
+        if (divCurso.classList.contains("bloqueado")) return;
+
+        divCurso.classList.toggle("aprobado");
+        const ahoraAprobado = divCurso.classList.contains("aprobado");
+
+        creditosAprobados += ahoraAprobado ? curso.creditos : -curso.creditos;
         creditosEl.textContent = creditosAprobados;
 
-        localStorage.setItem(cursoId, aprobado);
+        localStorage.setItem(cursoId, ahoraAprobado);
 
-        mostrarEvaluaciones(curso.nombre, curso.creditos); // ✅ Mostrar evaluaciones
-        mostrarProfesor(curso.nombre);                      // ✅ Mostrar profesor
-        actualizarEstadisticas();                           // ✅ Recalcular
+        mostrarEvaluaciones(curso.nombre, curso.creditos);
+        mostrarProfesor(curso.nombre);
+        actualizarEstadisticas();
+        actualizarBarraProgreso();
       });
 
       divSemestre.appendChild(divCurso);
@@ -57,10 +70,53 @@ function crearMalla(malla) {
   });
 
   creditosEl.textContent = creditosAprobados;
+  actualizarBarraProgreso();
 }
 
-/** 📊 Calcula estadísticas generales */
 function actualizarEstadisticas() {
-  calcularPromedioGeneral();
-  calcularRankingFinal();
+  calcularPromedioGeneral();  // debe estar en promedio.js
+  calcularRankingFinal();     // debe estar en ranking.js
+}
+
+function actualizarBarraProgreso() {
+  const totalCreditos = calcularTotalCreditos();
+  const creditosAprobados = calcularCreditosAprobados();
+  const porcentaje = (creditosAprobados / totalCreditos) * 100;
+
+  const relleno = document.getElementById("barra-relleno");
+  if (relleno) {
+    relleno.style.height = `${porcentaje}%`;
+  }
+}
+
+function calcularTotalCreditos() {
+  let total = 0;
+  mallaGlobal.forEach(sem => {
+    sem.cursos.forEach(c => {
+      if (!c.nombre.toLowerCase().includes("electivas") || c.creditos < 15) {
+        total += c.creditos;
+      }
+    });
+  });
+  return total;
+}
+
+function calcularCreditosAprobados() {
+  let total = 0;
+  mallaGlobal.forEach(sem => {
+    sem.cursos.forEach(curso => {
+      const id = `${sem.semestre}-${curso.nombre}`;
+      if (localStorage.getItem(id) === "true") {
+        total += curso.creditos;
+      }
+    });
+  });
+  return total;
+}
+
+// 🔐 Verifica si se cumplen los requisitos para un curso
+function cumpleRequisitos(requisitos) {
+  return requisitos.every(req => {
+    return Object.keys(localStorage).some(key => key.includes(req) && localStorage[key] === "true");
+  });
 }
